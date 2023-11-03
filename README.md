@@ -1,4 +1,4 @@
-# Getting Started with Create React App
+# CLass Attendance Tracker DApp
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
@@ -68,3 +68,167 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+# Steps:
+
+## Step 1: Install antd theme package
+
+> npm install antd --save
+
+## Step 2: Install Web3Modal package
+
+> npm i web3modal
+
+## Step 3: Install ethers package (v5.7)
+
+> npm i ethers@5.7
+
+## Step 4: Define Providers in App.js
+
+Before App() define following providers
+
+```
+export const providerOptions = {
+};
+```
+
+## Step 5: Create web3Modal instance
+
+### Step 5.1: Add web3Modal Import
+
+```
+import Web3Modal from "web3modal";
+```
+
+### Step 5.2: Create Instance in App()
+
+```
+const web3Modal = new Web3Modal({
+    providerOptions,
+  });
+```
+
+## Step 6: Create Connect Wallet button
+
+### Step 6.1: Import Button from antd
+
+```
+import { Button } from "antd";
+```
+
+### Step 6.2: Create new Button in App()
+
+Note: Replace return with following
+
+```
+return (
+    <div className="App">
+      <Button onClick={connectWallet}>Connect Wallet</Button>
+    </div>
+  );
+```
+
+## Step 7: Create connectWallet function in App()
+
+```
+
+const [provider, setProvider] = useState();
+const [web3, setWeb3] = useState();
+
+const connectWallet = async () => {
+  try {
+      const provider = await web3Modal.connect();
+      setProvider(provider);
+
+      const web3 = new ethers.BrowserProvider(provider);
+      setWeb3(web3);
+  } catch (error) {
+    console.error(error);
+  }
+};
+```
+
+## Step 8: Display Connected Wallet
+
+### Step 8.1: Add Wallet Address Display code in App()
+
+Note: Replace return with following
+
+```
+return (
+  <div className="App">
+    <Button onClick={connectWallet}>
+      Connect Wallet
+      <div>Connection Status: {account ? `Connected` : `Disconnected`}</div>
+      {account && <div>Wallet Address: {account}</div>}
+    </Button>
+  </div>
+);
+
+```
+
+### Step 8.2: Update connectWallet function to find wallet address and network and add 2 states
+
+```
+
+const [account, setAccount] = useState();
+const [network, setNetwork] = useState();
+
+const connectWallet = async () => {
+    try {
+      const provider = await web3Modal.connect();
+      setProvider(provider);
+
+      const web3 = new ethers.providers.Web3Provider(provider);
+      setWeb3(web3);
+
+      const accounts = await web3.listAccounts();
+      if (accounts) {
+        setAccount(accounts[0]);
+      }
+
+      const network = await web3.getNetwork();
+      setNetwork(network);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+```
+
+## Step 9: Listen to Wallet events
+
+```
+const [chainId, setChainId] = useState();
+
+useEffect(() => {
+    if (provider?.on) {
+      const handleAccountsChanged = (accounts) => {
+        setAccount(accounts);
+      };
+
+      const handleChainChanged = (chainId) => {
+        setChainId(chainId);
+      };
+
+      const handleDisconnect = () => {
+        setAccount(null);
+        setNetwork(null);
+        setChainId(null);
+      };
+
+      provider.on("accountsChanged", handleAccountsChanged);
+      provider.on("chainChanged", handleChainChanged);
+      provider.on("disconnect", handleDisconnect);
+
+      return () => {
+        if (provider.removeListener) {
+          provider.removeListener("accountsChanged", handleAccountsChanged);
+          provider.removeListener("chainChanged", handleChainChanged);
+          provider.removeListener("disconnect", handleDisconnect);
+        }
+      };
+    }
+  }, [provider]);
+```
+
+Ref: https://docs.cloud.coinbase.com/wallet-sdk/docs/web3modal
