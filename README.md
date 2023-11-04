@@ -131,21 +131,30 @@ return (
 ## Step 7: Create connectWallet function in App()
 
 ```
+import { useState } from "react";
+import { ethers } from "ethers";
 
+```
+
+```
 const [provider, setProvider] = useState();
-const [web3, setWeb3] = useState();
+  const [web3, setWeb3] = useState();
 
-const connectWallet = async () => {
-  try {
+  const [provider, setProvider] = useState();
+  const [web3, setWeb3] = useState();
+
+  const connectWallet = async () => {
+    try {
       const provider = await web3Modal.connect();
       setProvider(provider);
 
-      const web3 = new ethers.BrowserProvider(provider);
+      const web3 = new ethers.providers.Web3Provider(provider);
       setWeb3(web3);
-  } catch (error) {
-    console.error(error);
-  }
-};
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
 ```
 
 ## Step 8: Display Connected Wallet
@@ -243,3 +252,43 @@ Add following line in App.js and paste your deployed contract address
 
 > const attendanceTrackerContractAddress =
 > "<your-contracts-address>";
+
+## Step 12: Define HandleSubmit function which create a instance of contract and sends the transaction
+
+```
+const handleSubmit = async (values) => {
+    try {
+      const signer = web3.getSigner();
+      const attendanceTrackerContract = new ethers.Contract(
+        attendanceTrackerContractAddress,
+        AttendanceTrackerArtifact.abi,
+        signer
+      );
+
+      await attendanceTrackerContract.addClass(
+        values.id,
+        values.name,
+        values.at,
+        values.noOfStudents
+      );
+    } catch (error) {
+      console.error(error);
+    }
+  };
+```
+
+### Step 13: Link the handle submit function in Form on onFinish
+
+```
+<Form
+  name="wrap"
+  labelCol={{ flex: "110px" }}
+  labelAlign="left"
+  labelWrap
+  wrapperCol={{ flex: 1 }}
+  colon={false}
+  style={{ maxWidth: 600 }}
+  onFinish={handleSubmit}
+>
+...
+```
