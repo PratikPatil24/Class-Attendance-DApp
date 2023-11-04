@@ -115,7 +115,7 @@ const web3Modal = new Web3Modal({
 ### Step 6.1: Import Layout, Row, Col, Button from antd
 
 ```
-import { Button } from "antd";
+import { Layout, Row, Col, Button } from "antd";
 ```
 
 ### Step 6.2: Create new Button in App()
