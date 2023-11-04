@@ -145,20 +145,20 @@ import { ethers } from "ethers";
 
 ```
 
-const [provider, setProvider] = useState();
-const [web3, setWeb3] = useState();
+  const [provider, setProvider] = useState();
+  const [web3, setWeb3] = useState();
 
-const connectWallet = async () => {
-  try {
+  const connectWallet = async () => {
+    try {
       const provider = await web3Modal.connect();
       setProvider(provider);
 
-      const web3 = new ethers.BrowserProvider(provider);
+      const web3 = new ethers.providers.Web3Provider(provider);
       setWeb3(web3);
-  } catch (error) {
-    console.error(error);
-  }
-};
+    } catch (error) {
+      console.error(error);
+    }
+  };
 ```
 
 ## Step 8: Display Connected Wallet
