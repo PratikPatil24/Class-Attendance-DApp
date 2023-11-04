@@ -285,7 +285,6 @@ import AttendanceTrackerArtifact from "./constants/AttendanceTracker.json";
 
 ```
 
-
 ```
 <Row justify={"center"} style={{ marginTop: "80px" }}>
         <Col span={16}>
@@ -341,5 +340,120 @@ import AttendanceTrackerArtifact from "./constants/AttendanceTracker.json";
           )}
         </Col>
       </Row>
+```
+
+## Step 14: Add new Mark Attendance Form
+
+### Step 14.1: Import components
+
+```
+import { Layout, Row, Col, Button, Card, Form, Input, Select } from "antd";
+
+```
+
+### Step 14.2: Add Form UI
+
+```
+      <Row justify={"center"} style={{ marginTop: "80px" }}>
+        <Col span={16}>
+          {account && network && (
+            <div style={{ margin: "20px" }}>
+              <Card title="Mark Attendance">
+                <Form
+                  name="wrap"
+                  labelCol={{ flex: "110px" }}
+                  labelAlign="left"
+                  labelWrap
+                  wrapperCol={{ flex: 1 }}
+                  colon={false}
+                  style={{ maxWidth: 600 }}
+                  onFinish={handleMarkAttendance}
+                >
+                  <Form.Item
+                    label="Class Id"
+                    name="classId"
+                    rules={[{ required: true }]}
+                  >
+                    <Input />
+                  </Form.Item>
+
+                  <Form.Item
+                    label="Roll No"
+                    name="rollNo"
+                    rules={[{ required: true }]}
+                  >
+                    <Input />
+                  </Form.Item>
+
+                  <Form.Item
+                    name="Attendance"
+                    label="attendance"
+                    rules={[{ required: true }]}
+                  >
+                    <Select
+                      placeholder="Select a option and change input text above"
+                      onChange={onAttendanceChange}
+                      allowClear
+                    >
+                      <Option value="present">Present</Option>
+                      <Option value="absent">Absent</Option>
+                    </Select>
+                  </Form.Item>
+
+                  <Form.Item label="">
+                    <Button type="primary" htmlType="submit">
+                      Submit
+                    </Button>
+                  </Form.Item>
+                </Form>
+              </Card>
+            </div>
+          )}
+        </Col>
+      </Row>
+```
+
+### Step 14.3: Create Option Instance and create onAttenddanChange function inside App()
+
+```
+function App() {
+  const { Option } = Select;
+
+  const [form] = Form.useForm();
+
+  const onAttendanceChange = (value) => {
+    switch (value) {
+      case "present":
+        form.setFieldsValue({ attendance: true });
+        break;
+      case "absent":
+        form.setFieldsValue({ attendance: false });
+        break;
+      default:
+    }
+  };
 ...
+```
+
+## Step 15: Define Mark Attendance function in App()
+
+```
+  const handleMarkAttendance = async (values) => {
+    try {
+      const signer = web3.getSigner();
+      const attendanceTrackerContract = new ethers.Contract(
+        attendanceTrackerContractAddress,
+        AttendanceTrackerArtifact.abi,
+        signer
+      );
+
+      await attendanceTrackerContract.markAttendance(
+        values.classId,
+        values.rollNo,
+        values.attendance
+      );
+    } catch (error) {
+      console.error(error);
+    }
+  };
 ```
