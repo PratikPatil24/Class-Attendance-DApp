@@ -69,6 +69,8 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
 
+Contract Address: 0x0314725e4b0d948d93d33738c3e0aeb38f776dad
+
 # Steps:
 
 ## Step 1: Install antd theme package
@@ -110,7 +112,7 @@ const web3Modal = new Web3Modal({
 
 ## Step 6: Create Connect Wallet button
 
-### Step 6.1: Import Button from antd
+### Step 6.1: Import Layout, Row, Col, Button from antd
 
 ```
 import { Button } from "antd";
@@ -121,10 +123,16 @@ import { Button } from "antd";
 Note: Replace return with following
 
 ```
-return (
-    <div className="App">
-      <Button onClick={connectWallet}>Connect Wallet</Button>
-    </div>
+  return (
+    <Layout>
+      <Row justify={"center"} style={{ marginTop: "80px" }}>
+        <Col>
+          <Button onClick={connectWallet}>
+            Connect Wallet
+          </Button>
+        </Col>
+      </Row>
+    </Layout>
   );
 ```
 
@@ -155,15 +163,24 @@ const connectWallet = async () => {
 Note: Replace return with following
 
 ```
-return (
-  <div className="App">
-    <Button onClick={connectWallet}>
-      Connect Wallet
-      <div>Connection Status: {account ? `Connected` : `Disconnected`}</div>
-      {account && <div>Wallet Address: {account}</div>}
-    </Button>
-  </div>
-);
+  return (
+    <Layout>
+      <Row justify={"center"} style={{ marginTop: "80px" }}>
+        <Col>
+          <Button onClick={connectWallet}>
+            Connect Wallet
+            <div>
+              Connection Status: {account ? `Connected` : `Disconnected`}
+            </div>
+            <div>
+              {account && <div>Wallet Address: {account}</div>}
+              {network && <div>Network: {network.name}</div>}
+            </div>
+          </Button>
+        </Col>
+      </Row>
+    </Layout>
+  );
 
 ```
 
@@ -230,3 +247,11 @@ useEffect(() => {
     }
   }, [provider]);
 ```
+
+## Step 10: Add AttendanceTracker Smart Contract Arctifact (.json file) in constants folder
+
+1. Copy the file Artifact file from Remix
+2. Create a new constants folder and create a new file AttendanceTracker.json in the folder
+3. Paste the Copied content of Articfact file
+
+## Step 11: Create Contract Instance

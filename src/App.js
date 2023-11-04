@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import "./App.css";
 import Web3Modal from "web3modal";
 import { ethers } from "ethers";
-import { Button } from "antd";
+import { Layout, Row, Col, Button } from "antd";
 
 export const providerOptions = {
   // walletconnect: {
@@ -76,14 +76,22 @@ function App() {
   }, [provider]);
 
   return (
-    <div className="App">
-      <Button onClick={connectWallet}>
-        Connect Wallet
-        <div>Connection Status: {account ? `Connected` : `Disconnected`}</div>
-        {account && <div>Wallet Address: {account}</div>}
-        {network && <div>Network: {network.name}</div>}
-      </Button>
-    </div>
+    <Layout>
+      <Row justify={"center"} style={{ marginTop: "80px" }}>
+        <Col>
+          <Button onClick={connectWallet}>
+            Connect Wallet
+            <div>
+              Connection Status: {account ? `Connected` : `Disconnected`}
+            </div>
+            <div>
+              {account && <div>Wallet Address: {account}</div>}
+              {network && <div>Network: {network.name}</div>}
+            </div>
+          </Button>
+        </Col>
+      </Row>
+    </Layout>
   );
 }
 
