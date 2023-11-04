@@ -230,5 +230,3 @@ useEffect(() => {
     }
   }, [provider]);
 ```
-
-Ref: https://docs.cloud.coinbase.com/wallet-sdk/docs/web3modal
