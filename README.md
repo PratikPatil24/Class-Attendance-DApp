@@ -148,6 +148,9 @@ import { ethers } from "ethers";
   const [provider, setProvider] = useState();
   const [web3, setWeb3] = useState();
 
+  const [provider, setProvider] = useState();
+  const [web3, setWeb3] = useState();
+
   const connectWallet = async () => {
     try {
       const provider = await web3Modal.connect();
@@ -159,6 +162,7 @@ import { ethers } from "ethers";
       console.error(error);
     }
   };
+
 ```
 
 ## Step 8: Display Connected Wallet
