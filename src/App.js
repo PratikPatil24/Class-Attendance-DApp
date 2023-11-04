@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import "./App.css";
 import Web3Modal from "web3modal";
 import { ethers } from "ethers";
-import { Button } from "antd";
+import { Layout, Row, Col, Button, Card, Form, Input } from "antd";
 
 export const providerOptions = {
   // walletconnect: {
@@ -76,14 +76,79 @@ function App() {
   }, [provider]);
 
   return (
-    <div className="App">
-      <Button onClick={connectWallet}>
-        Connect Wallet
-        <div>Connection Status: {account ? `Connected` : `Disconnected`}</div>
-        {account && <div>Wallet Address: {account}</div>}
-        {network && <div>Network: {network.name}</div>}
-      </Button>
-    </div>
+    <Layout>
+      <Row justify={"center"} style={{ marginTop: "80px" }}>
+        <Col>
+          <Button onClick={connectWallet}>
+            Connect Wallet
+            <div>
+              Connection Status: {account ? `Connected` : `Disconnected`}
+            </div>
+            <div>
+              {account && <div>Wallet Address: {account}</div>}
+              {network && <div>Network: {network.name}</div>}
+            </div>
+          </Button>
+        </Col>
+      </Row>
+
+      <Row justify={"center"} style={{ marginTop: "80px" }}>
+        <Col span={16}>
+          {account && network && (
+            <div style={{ margin: "20px" }}>
+              <Card title="Add New Class">
+                <Form
+                  name="wrap"
+                  labelCol={{ flex: "110px" }}
+                  labelAlign="left"
+                  labelWrap
+                  wrapperCol={{ flex: 1 }}
+                  colon={false}
+                  style={{ maxWidth: 600 }}
+                  onFinish={(values) => {
+                    console.log(values);
+                  }}
+                >
+                  <Form.Item label="Id" name="id" rules={[{ required: true }]}>
+                    <Input />
+                  </Form.Item>
+
+                  <Form.Item
+                    label="Name"
+                    name="name"
+                    rules={[{ required: true }]}
+                  >
+                    <Input />
+                  </Form.Item>
+
+                  <Form.Item
+                    label="Time"
+                    name="at"
+                    rules={[{ required: true }]}
+                  >
+                    <Input />
+                  </Form.Item>
+
+                  <Form.Item
+                    label="No Of Students"
+                    name="noOfStudents"
+                    rules={[{ required: true }]}
+                  >
+                    <Input />
+                  </Form.Item>
+
+                  <Form.Item label="">
+                    <Button type="primary" htmlType="submit">
+                      Submit
+                    </Button>
+                  </Form.Item>
+                </Form>
+              </Card>
+            </div>
+          )}
+        </Col>
+      </Row>
+    </Layout>
   );
 }
 
