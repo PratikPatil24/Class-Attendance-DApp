@@ -137,6 +137,11 @@ Note: Replace return with following
 ```
 
 ## Step 7: Create connectWallet function in App()
+```
+import { useState } from "react";
+import { ethers } from "ethers";
+
+```
 
 ```
 
