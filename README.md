@@ -281,6 +281,8 @@ const handleSubmit = async (values) => {
 
 ```
 import { Layout, Row, Col, Button, Card, Form, Input } from "antd";
+import AttendanceTrackerArtifact from "./constants/AttendanceTracker.json";
+
 ```
 
 
