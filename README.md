@@ -203,7 +203,7 @@ const [chainId, setChainId] = useState();
 useEffect(() => {
     if (provider?.on) {
       const handleAccountsChanged = (accounts) => {
-        setAccount(accounts);
+        setAccount(accounts[0]);
       };
 
       const handleChainChanged = (chainId) => {
@@ -230,3 +230,16 @@ useEffect(() => {
     }
   }, [provider]);
 ```
+
+## Step 10: Add AttendanceTracker Smart Contract Artifact to React
+
+1. Create constants folder in src folder
+2. Create a file named AttendanceTracker.json in constants folder
+3. Copy the Content of AttendanceTracker artifact file from remix and paste it in the AttendanceTracker.json file
+
+## Step 11: Add Contract Address of Deployed Contract in React
+
+Add following line in App.js and paste your deployed contract address
+
+> const attendanceTrackerContractAddress =
+> "<your-contracts-address>";

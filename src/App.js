@@ -3,27 +3,21 @@ import "./App.css";
 import Web3Modal from "web3modal";
 import { ethers } from "ethers";
 import { Layout, Row, Col, Button, Card, Form, Input } from "antd";
+import AttendanceTrackerArtifact from "./constants/AttendanceTracker.json";
 
-export const providerOptions = {
-  // walletconnect: {
-  //   package: WalletConnect,
-  //   options: {
-  //     infuraId: process.env.INFURA_KEY,
-  //   },
-  // },
-};
+export const providerOptions = {};
+
+const attendanceTrackerContractAddress =
+  "0x0314725e4b0d948D93d33738c3e0aeb38F776dAD";
 
 function App() {
-  const web3Modal = new Web3Modal({
-    providerOptions,
-  });
+  const [provider, setProvider] = useState(null);
+  const [web3, setWeb3] = useState(null);
+  const [account, setAccount] = useState(null);
+  const [network, setNetwork] = useState(null);
+  const [chainId, setChainId] = useState(null);
 
-  const [provider, setProvider] = useState();
-  const [web3, setWeb3] = useState();
-
-  const [account, setAccount] = useState();
-  const [network, setNetwork] = useState();
-  const [chainId, setChainId] = useState();
+  const web3Modal = new Web3Modal({ providerOptions });
 
   const connectWallet = async () => {
     try {
@@ -34,7 +28,7 @@ function App() {
       setWeb3(web3);
 
       const accounts = await web3.listAccounts();
-      if (accounts) {
+      if (accounts.length > 0) {
         setAccount(accounts[0]);
       }
 
@@ -46,9 +40,9 @@ function App() {
   };
 
   useEffect(() => {
-    if (provider?.on) {
+    if (provider) {
       const handleAccountsChanged = (accounts) => {
-        setAccount(accounts);
+        setAccount(accounts[0]);
       };
 
       const handleChainChanged = (chainId) => {
@@ -74,6 +68,26 @@ function App() {
       };
     }
   }, [provider]);
+
+  const handleSubmit = async (values) => {
+    try {
+      const signer = web3.getSigner();
+      const attendanceTrackerContract = new ethers.Contract(
+        attendanceTrackerContractAddress,
+        AttendanceTrackerArtifact.abi,
+        signer
+      );
+
+      await attendanceTrackerContract.addClass(
+        values.id,
+        values.name,
+        values.at,
+        values.noOfStudents
+      );
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <Layout>
@@ -105,9 +119,7 @@ function App() {
                   wrapperCol={{ flex: 1 }}
                   colon={false}
                   style={{ maxWidth: 600 }}
-                  onFinish={(values) => {
-                    console.log(values);
-                  }}
+                  onFinish={handleSubmit}
                 >
                   <Form.Item label="Id" name="id" rules={[{ required: true }]}>
                     <Input />
