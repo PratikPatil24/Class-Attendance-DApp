@@ -280,7 +280,7 @@ const handleSubmit = async (values) => {
 ### Step 13: Link the handle submit function in Form on onFinish
 
 ```
-import { Layout, Row, Col, Button, Card, Form, Input } from "and";
+import { Layout, Row, Col, Button, Card, Form, Input } from "antd";
 ```
 
 
