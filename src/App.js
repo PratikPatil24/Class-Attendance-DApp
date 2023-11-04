@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import "./App.css";
 import Web3Modal from "web3modal";
 import { ethers } from "ethers";
-import { Layout, Row, Col, Button, Card, Form, Input } from "antd";
+import { Layout, Row, Col, Button, Card, Form, Input, Select } from "antd";
 import AttendanceTrackerArtifact from "./constants/AttendanceTracker.json";
 
 export const providerOptions = {};
@@ -11,6 +11,8 @@ const attendanceTrackerContractAddress =
   "0x0314725e4b0d948D93d33738c3e0aeb38F776dAD";
 
 function App() {
+  const { Option } = Select;
+
   const [provider, setProvider] = useState(null);
   const [web3, setWeb3] = useState(null);
   const [account, setAccount] = useState(null);
@@ -69,7 +71,7 @@ function App() {
     }
   }, [provider]);
 
-  const handleSubmit = async (values) => {
+  const handleAddNewClass = async (values) => {
     try {
       const signer = web3.getSigner();
       const attendanceTrackerContract = new ethers.Contract(
@@ -83,6 +85,39 @@ function App() {
         values.name,
         values.at,
         values.noOfStudents
+      );
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const [form] = Form.useForm();
+
+  const onAttendanceChange = (value) => {
+    switch (value) {
+      case "present":
+        form.setFieldsValue({ attendance: true });
+        break;
+      case "absent":
+        form.setFieldsValue({ attendance: false });
+        break;
+      default:
+    }
+  };
+
+  const handleMarkAttendance = async (values) => {
+    try {
+      const signer = web3.getSigner();
+      const attendanceTrackerContract = new ethers.Contract(
+        attendanceTrackerContractAddress,
+        AttendanceTrackerArtifact.abi,
+        signer
+      );
+
+      await attendanceTrackerContract.markAttendance(
+        values.classId,
+        values.rollNo,
+        values.attendance
       );
     } catch (error) {
       console.error(error);
@@ -119,7 +154,7 @@ function App() {
                   wrapperCol={{ flex: 1 }}
                   colon={false}
                   style={{ maxWidth: 600 }}
-                  onFinish={handleSubmit}
+                  onFinish={handleAddNewClass}
                 >
                   <Form.Item label="Id" name="id" rules={[{ required: true }]}>
                     <Input />
@@ -147,6 +182,64 @@ function App() {
                     rules={[{ required: true }]}
                   >
                     <Input />
+                  </Form.Item>
+
+                  <Form.Item label="">
+                    <Button type="primary" htmlType="submit">
+                      Submit
+                    </Button>
+                  </Form.Item>
+                </Form>
+              </Card>
+            </div>
+          )}
+        </Col>
+      </Row>
+
+      <Row justify={"center"} style={{ marginTop: "80px" }}>
+        <Col span={16}>
+          {account && network && (
+            <div style={{ margin: "20px" }}>
+              <Card title="Mark Attendance">
+                <Form
+                  name="wrap"
+                  labelCol={{ flex: "110px" }}
+                  labelAlign="left"
+                  labelWrap
+                  wrapperCol={{ flex: 1 }}
+                  colon={false}
+                  style={{ maxWidth: 600 }}
+                  onFinish={handleMarkAttendance}
+                >
+                  <Form.Item
+                    label="Class Id"
+                    name="classId"
+                    rules={[{ required: true }]}
+                  >
+                    <Input />
+                  </Form.Item>
+
+                  <Form.Item
+                    label="Roll No"
+                    name="rollNo"
+                    rules={[{ required: true }]}
+                  >
+                    <Input />
+                  </Form.Item>
+
+                  <Form.Item
+                    name="Attendance"
+                    label="attendance"
+                    rules={[{ required: true }]}
+                  >
+                    <Select
+                      placeholder="Select a option and change input text above"
+                      onChange={onAttendanceChange}
+                      allowClear
+                    >
+                      <Option value="present">Present</Option>
+                      <Option value="absent">Absent</Option>
+                    </Select>
                   </Form.Item>
 
                   <Form.Item label="">
