@@ -280,15 +280,64 @@ const handleSubmit = async (values) => {
 ### Step 13: Link the handle submit function in Form on onFinish
 
 ```
-<Form
-  name="wrap"
-  labelCol={{ flex: "110px" }}
-  labelAlign="left"
-  labelWrap
-  wrapperCol={{ flex: 1 }}
-  colon={false}
-  style={{ maxWidth: 600 }}
-  onFinish={handleSubmit}
->
+import { Layout, Row, Col, Button, Card, Form, Input } from "and";
+```
+
+
+```
+<Row justify={"center"} style={{ marginTop: "80px" }}>
+        <Col span={16}>
+          {account && network && (
+            <div style={{ margin: "20px" }}>
+              <Card title="Add New Class">
+                <Form
+                  name="wrap"
+                  labelCol={{ flex: "110px" }}
+                  labelAlign="left"
+                  labelWrap
+                  wrapperCol={{ flex: 1 }}
+                  colon={false}
+                  style={{ maxWidth: 600 }}
+                  onFinish={handleSubmit}
+                >
+                  <Form.Item label="Id" name="id" rules={[{ required: true }]}>
+                    <Input />
+                  </Form.Item>
+
+                  <Form.Item
+                    label="Name"
+                    name="name"
+                    rules={[{ required: true }]}
+                  >
+                    <Input />
+                  </Form.Item>
+
+                  <Form.Item
+                    label="Time"
+                    name="at"
+                    rules={[{ required: true }]}
+                  >
+                    <Input />
+                  </Form.Item>
+
+                  <Form.Item
+                    label="No Of Students"
+                    name="noOfStudents"
+                    rules={[{ required: true }]}
+                  >
+                    <Input />
+                  </Form.Item>
+
+                  <Form.Item label="">
+                    <Button type="primary" htmlType="submit">
+                      Submit
+                    </Button>
+                  </Form.Item>
+                </Form>
+              </Card>
+            </div>
+          )}
+        </Col>
+      </Row>
 ...
 ```
