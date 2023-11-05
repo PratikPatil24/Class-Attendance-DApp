@@ -434,3 +434,118 @@ import { Layout, Row, Col, Button, Card, Form, Input, Select } from "antd";
     }
   };
 ```
+
+## Step 16: Get Class Attendance
+
+### Step 16.1: Append Get Class Attendance Form in App() return
+
+```
+      <Row justify={"center"} style={{ marginTop: "80px" }}>
+        <Col span={16}>
+          {account && network && (
+            <div style={{ margin: "20px" }}>
+              <Card title="Get Attendance">
+                <Form
+                  name="getAttendance"
+                  labelCol={{ flex: "110px" }}
+                  labelAlign="left"
+                  labelWrap
+                  wrapperCol={{ flex: 1 }}
+                  colon={false}
+                  style={{ maxWidth: 600 }}
+                  onFinish={getClassAttendance}
+                >
+                  <Form.Item
+                    label="Class Id"
+                    name="classId"
+                    rules={[{ required: true }]}
+                  >
+                    <Input />
+                  </Form.Item>
+
+                  <Form.Item label="">
+                    <Button type="primary" htmlType="submit">
+                      Submit
+                    </Button>
+                  </Form.Item>
+                </Form>
+              </Card>
+            </div>
+          )}
+        </Col>
+      </Row>
+```
+
+### Step 16.2: Append Display Attendance UI in App() return
+
+```
+  <Row justify="center" style={{ marginTop: "40px" }}>
+        <Col span={16}>
+          {account && classAttendance.length > 0 && (
+            <Row>
+              <h3>Class Attendance</h3>
+              <Col
+                span={22}
+                style={{ border: "1px solid #ccc", padding: "10px" }}
+              >
+                {classAttendance.map((student) => (
+                  <p key={student.rollNo}>
+                    {`Roll No: ${student.rollNo} Attendance: ${
+                      student.attendance ? "Present" : "Absent"
+                    }`}
+                  </p>
+                ))}
+              </Col>
+            </Row>
+          )}
+        </Col>
+      </Row>
+```
+
+### Step 16.3: Add classAttendance State
+
+```
+  const [classAttendance, setClassAttendance] = useState([]);
+
+```
+
+### Step 16.4: Add getClassAttendance function
+
+```
+  const getClassAttendance = async (values) => {
+    try {
+      const signer = web3.getSigner();
+      const attendanceTrackerContract = new ethers.Contract(
+        attendanceTrackerContractAddress,
+        AttendanceTrackerArtifact.abi,
+        signer
+      );
+
+      const classDataFromContract = await attendanceTrackerContract.classes(
+        values.classId
+      );
+
+      const classData = {};
+      classData.id = classDataFromContract[0].toNumber();
+      classData.name = classDataFromContract[1];
+      classData.at = classDataFromContract[2].toNumber();
+      classData.noOfStudents = classDataFromContract[3].toNumber();
+      console.log(classData);
+
+      const classAttendance = [];
+      for (let i = 1; i <= classData.noOfStudents; i++) {
+        const attendance = await attendanceTrackerContract.getAttendance(
+          values.classId,
+          i
+        );
+        console.log(attendance);
+        classAttendance.push({ rollNo: i, attendance });
+      }
+      console.log(classAttendance);
+      setClassAttendance(classAttendance);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+```
