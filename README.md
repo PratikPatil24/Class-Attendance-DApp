@@ -351,6 +351,11 @@ import { Layout, Row, Col, Button, Card, Form, Input, Select } from "antd";
 
 ```
 
+Add below line in App()
+```
+  const { Option } = Select;
+```
+
 ### Step 14.2: Add Form UI
 
 ```
