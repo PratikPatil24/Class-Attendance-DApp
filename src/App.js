@@ -228,8 +228,8 @@ function App() {
                   </Form.Item>
 
                   <Form.Item
-                    name="Attendance"
-                    label="attendance"
+                    name="attendance"
+                    label="Attendance"
                     rules={[{ required: true }]}
                   >
                     <Select
@@ -237,8 +237,8 @@ function App() {
                       onChange={onAttendanceChange}
                       allowClear
                     >
-                      <Option value="present">Present</Option>
-                      <Option value="absent">Absent</Option>
+                      <Option value={true}>Present</Option>
+                      <Option value={false}>Absent</Option>
                     </Select>
                   </Form.Item>
 
