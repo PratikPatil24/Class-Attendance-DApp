@@ -91,20 +91,6 @@ function App() {
     }
   };
 
-  const [form] = Form.useForm();
-
-  const onAttendanceChange = (value) => {
-    switch (value) {
-      case "present":
-        form.setFieldsValue({ attendance: true });
-        break;
-      case "absent":
-        form.setFieldsValue({ attendance: false });
-        break;
-      default:
-    }
-  };
-
   const handleMarkAttendance = async (values) => {
     try {
       const signer = web3.getSigner();
@@ -147,7 +133,7 @@ function App() {
             <div style={{ margin: "20px" }}>
               <Card title="Add New Class">
                 <Form
-                  name="wrap"
+                  name="addNewClass"
                   labelCol={{ flex: "110px" }}
                   labelAlign="left"
                   labelWrap
@@ -202,7 +188,7 @@ function App() {
             <div style={{ margin: "20px" }}>
               <Card title="Mark Attendance">
                 <Form
-                  name="wrap"
+                  name="markAttendance"
                   labelCol={{ flex: "110px" }}
                   labelAlign="left"
                   labelWrap
@@ -234,7 +220,6 @@ function App() {
                   >
                     <Select
                       placeholder="Select a option and change input text above"
-                      onChange={onAttendanceChange}
                       allowClear
                     >
                       <Option value={true}>Present</Option>

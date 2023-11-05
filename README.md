@@ -386,17 +386,16 @@ import { Layout, Row, Col, Button, Card, Form, Input, Select } from "antd";
                   </Form.Item>
 
                   <Form.Item
-                    name="Attendance"
-                    label="attendance"
+                    name="attendance"
+                    label="Attendance"
                     rules={[{ required: true }]}
                   >
                     <Select
                       placeholder="Select a option and change input text above"
-                      onChange={onAttendanceChange}
                       allowClear
                     >
-                      <Option value="present">Present</Option>
-                      <Option value="absent">Absent</Option>
+                      <Option value={true}>Present</Option>
+                      <Option value={false}>Absent</Option>
                     </Select>
                   </Form.Item>
 
@@ -411,28 +410,6 @@ import { Layout, Row, Col, Button, Card, Form, Input, Select } from "antd";
           )}
         </Col>
       </Row>
-```
-
-### Step 14.3: Create Option Instance and create onAttenddanChange function inside App()
-
-```
-function App() {
-  const { Option } = Select;
-
-  const [form] = Form.useForm();
-
-  const onAttendanceChange = (value) => {
-    switch (value) {
-      case "present":
-        form.setFieldsValue({ attendance: true });
-        break;
-      case "absent":
-        form.setFieldsValue({ attendance: false });
-        break;
-      default:
-    }
-  };
-...
 ```
 
 ## Step 15: Define Mark Attendance function in App()
